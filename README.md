@@ -1,1 +1,1 @@
-# GraphIsomorphism
+# Graph Isomorphism
