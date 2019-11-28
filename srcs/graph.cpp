@@ -35,11 +35,22 @@ bool Graph::add_edge(int u, int v) {
     return true;
 }
 
+string Graph::certificate(void) {
+    string ret = "";
+    for (int v = 0; v < num_nodes; ++v) {
+        for (int u = 0; u < v; ++u) {
+            ret += (adj_matrix[u][v] ? "1" : "0");
+        }
+    }
+
+    return ret;
+}
+
 void Graph::print(void) {
     cout << "Nodes: " << num_nodes << endl;
     cout << "Edges: " << num_edges << endl;
 
-    cout << "Adjacency Matrix: " << endl;
+    cout << endl << "Adjacency Matrix: " << endl;
     cout << "  ";
     for (int v = 0; v < num_nodes; ++v) {
         cout << v % 10 << ' ';
@@ -52,6 +63,9 @@ void Graph::print(void) {
         }
         cout << endl;
     }
+    cout << endl;
+
+    cout << "Certificate: " << certificate() << endl;
 
     return;
 }

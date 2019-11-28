@@ -1,6 +1,7 @@
 #ifndef _GRAPH_H_
 #define _GRAPH_H_
 
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -15,7 +16,10 @@ public:
     Graph(int _num_nodes);
 
     void init(int _num_nodes);
+
     bool add_edge(int u, int v);
+    string certificate(void);
+
     void print(void);
 };
 
