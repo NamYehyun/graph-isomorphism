@@ -6,66 +6,72 @@
 
 using namespace std;
 
-Graph::Graph(void): num_nodes(0), num_edges(0) {}
+Node::Node(int _id): id(_id), colour(0) {}
+
+Node::~Node(void) {}
+
+Graph::Graph(void): num_nodes(0), num_edges(0) {
+    nodes.clear();
+    id_to_node.clear();
+}
 
 Graph::Graph(int _num_nodes): num_nodes(_num_nodes), num_edges(0) {
     assert(0 < num_nodes);
-    adj_matrix.resize(num_nodes, vector<bool>(num_nodes, false));
+
+    nodes.clear();
+    nodes.reserve(num_nodes);
+
+    id_to_node.clear();
+}
+
+Graph::~Graph(void) {
+    for (Node* node: nodes) {
+        delete node;
+    }
 }
 
 void Graph::init(int _num_nodes) {
     assert(0 < _num_nodes);
     num_nodes = _num_nodes;
-    adj_matrix.resize(num_nodes, vector<bool>(num_nodes, false));
+    
+    nodes.clear();
+    nodes.reserve(num_nodes);
+
+    id_to_node.clear();
 
     return;
 }
 
-bool Graph::add_edge(int u, int v) {
+Node* Graph::get_node(int id) {
+    assert(0 <= id && id < num_nodes);
+
+    if (id_to_node.find(id) == id_to_node.end()) {
+        Node* node = new Node(id);
+        nodes.emplace_back(node);
+        id_to_node[id] = node;
+    }
+
+    return id_to_node[id];
+}
+
+void Graph::add_edge(int u, int v) {
     assert(0 <= u && u < num_nodes);
     assert(0 <= v && v < num_nodes);
 
-    if (adj_matrix[u][v] || adj_matrix[v][u]) {
-        return false;
-    }
+    Node* node_u = get_node(u);
+    Node* node_v = get_node(v);
 
-    adj_matrix[u][v] = adj_matrix[v][u] = true;
+    node_u->neighbors.insert(node_v);
+    node_v->neighbors.insert(node_u);
+
     ++num_edges;
 
-    return true;
-}
-
-string Graph::certificate(void) {
-    string ret = "";
-    for (int v = 0; v < num_nodes; ++v) {
-        for (int u = 0; u < v; ++u) {
-            ret += (adj_matrix[u][v] ? "1" : "0");
-        }
-    }
-
-    return ret;
+    return;
 }
 
 void Graph::print(void) {
     cout << "Nodes: " << num_nodes << endl;
     cout << "Edges: " << num_edges << endl;
-
-    cout << endl << "Adjacency Matrix: " << endl;
-    cout << "  ";
-    for (int v = 0; v < num_nodes; ++v) {
-        cout << v % 10 << ' ';
-    }
-    cout << endl;
-    for (int u = 0; u < num_nodes; ++u) {
-        cout << u % 10 << ' ';
-        for (int v = 0; v < num_nodes; ++v) {
-            cout << adj_matrix[u][v] << ' ';
-        }
-        cout << endl;
-    }
-    cout << endl;
-
-    cout << "Certificate: " << certificate() << endl;
 
     return;
 }
