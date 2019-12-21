@@ -18,6 +18,7 @@ bool read_graph(string input_path, Graph& graph) {
         istringstream iss(line);
 
         char key;
+        string name;
         string token;
         int num_nodes = 0;
         int num_edges = 0;
@@ -26,6 +27,11 @@ bool read_graph(string input_path, Graph& graph) {
         iss >> key;
         switch (key) {
             case 'c': /* comment line */
+                iss >> name;
+                while (iss >> token) {
+                    name += ("_" + token);
+                }
+                graph.set_name(name);
                 break;
             case 'p': /* problem line */
                 iss >> token >> num_nodes >> num_edges;

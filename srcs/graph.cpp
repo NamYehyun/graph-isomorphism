@@ -10,10 +10,7 @@ Node::Node(int _id): id(_id), colour(0) {}
 
 Node::~Node(void) {}
 
-Graph::Graph(void): num_nodes(0), num_edges(0) {
-    nodes.clear();
-    id_to_node.clear();
-}
+Graph::Graph(void): num_nodes(0), num_edges(0) {}
 
 Graph::Graph(int _num_nodes): num_nodes(_num_nodes), num_edges(0) {
     assert(0 < num_nodes);
@@ -39,6 +36,11 @@ void Graph::init(int _num_nodes) {
 
     id_to_node.clear();
 
+    return;
+}
+
+void Graph::set_name(string _name) {
+    name = _name;
     return;
 }
 
@@ -70,8 +72,9 @@ void Graph::add_edge(int u, int v) {
 }
 
 void Graph::print(void) {
-    cout << "Nodes: " << num_nodes << endl;
-    cout << "Edges: " << num_edges << endl;
+    cout << "Graph `" << name << "`" << endl;
+    cout << "  # Nodes: " << num_nodes << endl;
+    cout << "  # Edges: " << num_edges << endl;
 
     return;
 }

@@ -20,6 +20,7 @@ public:
 
 class Graph {
 public:
+    string name;
     int num_nodes;
     int num_edges;
     vector<Node*> nodes;
@@ -30,6 +31,7 @@ public:
     ~Graph(void);
 
     void init(int _num_nodes);
+    void set_name(string _name);
 
     Node* get_node(int id);
     void add_edge(int u, int v);
