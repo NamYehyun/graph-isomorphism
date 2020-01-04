@@ -125,11 +125,7 @@ void Graph::refine(void) {
 		list<Cell>::iterator cell;
 		for (cell = pi.cells.begin(); cell != pi.cells.end(); ++cell) {
 			vector<Node*>& cnodes = cell->nodes;
-			sort(cnodes.begin(), cnodes.end(),
-					[](const Node* a, const Node* b) -> bool {
-					return a->tmp < b->tmp;
-					}
-				);
+			sort(cnodes.begin(), cnodes.end(), [](const Node* a, const Node* b) -> bool { return a->tmp < b->tmp; });
 
 			if (cnodes.front()->tmp != cnodes.back()->tmp) {
 
@@ -137,7 +133,7 @@ void Graph::refine(void) {
 				while (idx < static_cast<int>(cnodes.size())) {
 					Cell new_cell;
 					new_cell.nodes.emplace_back(cnodes[idx]);
-					while (idx < static_cast<int>(cnodes.size())-1 && cnodes[idx+1]->tmp == cnodes[idx]->tmp) {
+					while (idx < static_cast<int>(cnodes.size()) - 1 && cnodes[idx+1]->tmp == cnodes[idx]->tmp) {
 						new_cell.nodes.emplace_back(cnodes[idx+1]);
 						++idx;
 					}
@@ -158,6 +154,7 @@ void Graph::refine(void) {
 	} while (!stable);
 
 	pi.equitable = true;
+
 	return;
 }
 
