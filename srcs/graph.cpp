@@ -19,7 +19,8 @@ Cell::Cell(void): counted(false) {}
 void Cell::print(void) {
 	cout << "( ";
 	for (Node* node: nodes) {
-		cout << node->id << ' ';
+		node->print();
+		cout << ' ';
 	}
 	cout << ")";
 }
