@@ -1,4 +1,6 @@
+*.swp
 objs/*
-inputs/*
+input
+output
 graph-isomorphism
 
