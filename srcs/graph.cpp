@@ -162,7 +162,7 @@ void Graph::print(void) {
 	cout << "Graph `" << name << "`" << endl;
 	cout << "  # Nodes: " << num_nodes << endl;
 	cout << "  # Edges: " << num_edges << endl;
-	cout << "  pi: "; pi.print(); cout << endl;
+	// cout << "  pi: "; pi.print(); cout << endl;
 
 	return;
 }

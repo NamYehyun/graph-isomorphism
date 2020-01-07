@@ -60,13 +60,13 @@ int main(int argc, char* argv[]) {
 	}
 
 	if (verbose) {
-		cout << setw(20) << "Generate graph" << setw(50) << setfill('.') << 1e-3 * timer.click() << " ms elapsed" << endl << setfill(' ');
+		cout << setfill('.') << left << setw(20) << "  Generate graph" << right << setw(50) << 1e-3 * timer.click() << " ms elapsed" << endl << setfill(' ');
 	}
 
 	graph.refine();
 
 	if (verbose) {
-		cout << setw(20) << "Refine graph" << setw(50) << setfill('.') << 1e-3 * timer.click() << " ms elapsed" << endl << setfill(' ');
+		cout << setfill('.') << left << setw(20) << "  Refine graph" << right << setw(50) << 1e-3 * timer.click() << " ms elapsed" << endl << setfill(' ');
 	}
 
 	graph.print();
