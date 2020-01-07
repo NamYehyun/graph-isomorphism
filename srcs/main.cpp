@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 #include <getopt.h>
 
@@ -14,18 +15,18 @@ int main(int argc, char* argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	int verbose = 0;
+	bool verbose = 0;
 	string input_path = "";
 
 	while (true) {
 		static struct option long_options[] = {
 			{"input", required_argument, nullptr, 'i'},
-			{"verbose", no_argument, &verbose, 'v'},
+			{"verbose", no_argument, nullptr, 'v'},
 			{"help", no_argument, nullptr, 'h'},
 			{0, 0, 0, 0}
 		};
 
-		int option = getopt_long(argc, argv, "i:h", long_options, nullptr);
+		int option = getopt_long(argc, argv, "i:vh", long_options, nullptr);
 		if (option < 0) {
 			break;
 		}
@@ -35,6 +36,7 @@ int main(int argc, char* argv[]) {
 				input_path = string(optarg);
 				break;
 			case 'v':
+				verbose = true;
 				break;
 			case 'h':
 				usage();
@@ -49,12 +51,24 @@ int main(int argc, char* argv[]) {
 		return EXIT_FAILURE;
 	}
 
+	Timer timer;
+	timer.click();
+
 	Graph graph;
 	if (!read_graph(input_path, graph)) {
 		return EXIT_FAILURE;
 	}
 
+	if (verbose) {
+		cout << setw(20) << "Generate graph" << setw(50) << setfill('.') << 1e-3 * timer.click() << " ms elapsed" << endl << setfill(' ');
+	}
+
 	graph.refine();
+
+	if (verbose) {
+		cout << setw(20) << "Refine graph" << setw(50) << setfill('.') << 1e-3 * timer.click() << " ms elapsed" << endl << setfill(' ');
+	}
+
 	graph.print();
 
 	return EXIT_SUCCESS;

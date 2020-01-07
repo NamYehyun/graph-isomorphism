@@ -49,3 +49,14 @@ bool read_graph(string input_path, Graph& graph) {
 	return true;
 }
 
+Timer::Timer(void) {
+	prev = curr = chrono::system_clock::now();
+}
+
+long Timer::click(void) {
+	prev = curr;
+	curr = chrono::system_clock::now();
+
+	return chrono::duration_cast<microseconds>(curr-prev).count();
+}
+
