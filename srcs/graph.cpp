@@ -99,7 +99,6 @@ void Graph::refine(void) {
 	long split_time = 0;
 
 	Timer timer;
-	timer.click();
 	#endif
 
 	if (!pi.init) {
@@ -128,9 +127,6 @@ void Graph::refine(void) {
 	#endif
 
 	do {
-		#ifdef BENCHMARK
-		timer.click();
-		#endif
 		Cell* target = uncounted_cells.front(); uncounted_cells.pop();
 
 		for (int i = target->begin; i < target->end; ++i) {
@@ -143,6 +139,7 @@ void Graph::refine(void) {
 		}
 
 		target->counted = true;
+
 		#ifdef BENCHMARK
 		count_time += timer.click();
 		#endif
@@ -176,9 +173,11 @@ void Graph::refine(void) {
 				}
 			}
 		}
+
 		#ifdef BENCHMARK
 		split_time += timer.click();
 		#endif
+
 	} while (!uncounted_cells.empty());
 
 	pi.equitable = true;
