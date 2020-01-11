@@ -51,6 +51,10 @@ int main(int argc, char* argv[]) {
 		return EXIT_FAILURE;
 	}
 
+	#ifdef BENCHMARK
+	verbose = true;
+	#endif
+
 	Timer timer;
 	timer.click();
 
@@ -60,16 +64,23 @@ int main(int argc, char* argv[]) {
 	}
 
 	if (verbose) {
-		cout << setfill('.') << left << setw(20) << "  Generate graph" << right << setw(50) << 1e-3 * timer.click() << " ms elapsed" << endl << setfill(' ');
+		cout << endl;
+		cout << setfill('.') << left << setw(20) << "  Generate graph" << right << setw(50) << to_string(1e-3 * timer.click()) + " ms elapsed" << endl << setfill(' ');
+	}
+
+	if (verbose) {
+		cout << setfill('.') << left << setw(70) << "  Refine graph" << endl << setfill(' ');
 	}
 
 	graph.refine();
 
 	if (verbose) {
-		cout << setfill('.') << left << setw(20) << "  Refine graph" << right << setw(50) << 1e-3 * timer.click() << " ms elapsed" << endl << setfill(' ');
+		cout << "  " << setfill('.') << right << setw(68) << to_string(1e-3 * timer.click()) + " ms elapsed" << endl << setfill(' ');
 	}
 
+	cout << endl;
 	graph.print();
+	cout << endl;
 
 	return EXIT_SUCCESS;
 }

@@ -16,28 +16,31 @@ public:
 
 	Node(int _id);
 
-	void print(void);
+	void print(void) const;
 };
 
 class Cell {
 public:
 	bool counted;
-	vector<Node*> nodes;
+	int begin, end;
 
 	Cell(void);
+	Cell(int _begin, int _end);
 
-	void print(void);
+	void print(void) const;
 };
 
 class Partition {
 public:
 	bool init;
 	bool equitable;
+
+	vector<Node*> nodes;
 	list<Cell> cells;
 
 	Partition(void);
 
-	void print(void);
+	void print(void) const;
 };
 
 class Graph {
@@ -61,7 +64,7 @@ public:
 
 	void refine(void);
 
-	void print(void);
+	void print(void) const;
 };
 
 #endif
