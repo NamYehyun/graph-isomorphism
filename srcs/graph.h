@@ -3,6 +3,7 @@
 
 #include <list>
 #include <string>
+#include <set>
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
@@ -11,12 +12,7 @@ using namespace std;
 
 class Node {
 public:
-	int id;
-	int tmp;
-
-	Node(int _id);
-
-	void print(void) const;
+	Node(void);
 };
 
 class Cell {
@@ -35,7 +31,7 @@ public:
 	bool init;
 	bool equitable;
 
-	vector<Node*> nodes;
+	vector<int> nodes;
 	list<Cell> cells;
 
 	Partition(void);
@@ -48,9 +44,8 @@ public:
 	string name;
 	int num_nodes;
 	int num_edges;
-	unordered_set<Node*> nodes;
-	unordered_map<int, Node*> id_to_node;
-	unordered_map<Node*, unordered_set<Node*>> adj_list;
+	vector<Node*> id_to_node;
+	vector<vector<int>> adj_list;
 
 	Partition pi;
 
@@ -59,7 +54,7 @@ public:
 
 	void init(int _num_nodes);
 	void set_name(string _name);
-	Node* get_node(int id);
+	void add_node(int id);
 	void add_edge(int u, int v);
 
 	void refine(void);

@@ -12,12 +12,7 @@
 
 using namespace std;
 
-Node::Node(int _id): id(_id), tmp(0) {}
-
-void Node::print(void) const {
-	cout << id;
-	return;
-}
+Node::Node(void) {}
 
 Cell::Cell(void): counted(false), begin(-1), end(-1) {}
 
@@ -32,10 +27,9 @@ Partition::Partition(void): init(false), equitable(false) {}
 
 void Partition::print(void) const {
 	cout << "| ";
-	for (const Cell& cell: cells) {
+	for (const Cell cell: cells) {
 		for (int i = cell.begin; i < cell.end; ++i) {
-			nodes[i]->print();
-			cout << ' ';
+			cout << nodes[i] << ' ';
 		}
 		cout << "| ";
 	}
@@ -46,7 +40,7 @@ void Partition::print(void) const {
 Graph::Graph(void): num_nodes(0), num_edges(0) {}
 
 Graph::~Graph(void) {
-	for (Node* node: nodes) {
+	for (Node* node: id_to_node) {
 		delete node;
 	}
 }
@@ -56,6 +50,10 @@ void Graph::init(int _num_nodes) {
 	num_nodes = _num_nodes;
 
 	id_to_node.clear();
+	id_to_node.resize(num_nodes, nullptr);
+
+	adj_list.clear();
+	adj_list.resize(num_nodes, vector<int>());
 
 	return;
 }
@@ -65,27 +63,25 @@ void Graph::set_name(string _name) {
 	return;
 }
 
-Node* Graph::get_node(int id) {
+void Graph::add_node(int id) {
 	assert(0 <= id && id < num_nodes);
 
-	if (id_to_node.find(id) == id_to_node.end()) {
-		Node* node = new Node(id);
-		nodes.insert(node);
-		id_to_node[id] = node;
+	if (id_to_node[id] == nullptr) {
+		id_to_node[id] = new Node();
 	}
 
-	return id_to_node[id];
+	return;
 }
 
 void Graph::add_edge(int u, int v) {
 	assert(0 <= u && u < num_nodes);
 	assert(0 <= v && v < num_nodes);
 
-	Node* node_u = get_node(u);
-	Node* node_v = get_node(v);
+	add_node(u);
+	add_node(v);
 
-	adj_list[node_u].insert(node_v);
-	adj_list[node_v].insert(node_u);
+	adj_list[u].push_back(v);
+	adj_list[v].push_back(u);
 
 	++num_edges;
 
@@ -93,6 +89,10 @@ void Graph::add_edge(int u, int v) {
 }
 
 void Graph::refine(void) {
+	if (pi.equitable) {
+		return;
+	}
+
 	#ifdef BENCHMARK
 	long init_time = 0;
 	long count_time = 0;
@@ -102,18 +102,16 @@ void Graph::refine(void) {
 	#endif
 
 	if (!pi.init) {
-		for (Node* node: nodes) {
-			pi.nodes.emplace_back(node);
+		pi.nodes.clear();
+		pi.nodes.reserve(num_nodes);
+		for (int i = 0; i < num_nodes; ++i) {
+			pi.nodes.emplace_back(i);
 		}
 
 		pi.cells.clear();
-		pi.cells.push_back(Cell(0, pi.nodes.size()));
+		pi.cells.push_back(Cell(0, num_nodes));
 
 		pi.init = true;
-	}
-
-	for (Node* node: nodes) {
-		node->tmp = 0;
 	}
 
 	queue<Cell*> uncounted_cells;
@@ -121,6 +119,8 @@ void Graph::refine(void) {
 		cell.counted = false;
 		uncounted_cells.push(&cell);
 	}
+
+	vector<long long> degree(num_nodes, 0);
 
 	#ifdef BENCHMARK
 	init_time += timer.click();
@@ -130,11 +130,9 @@ void Graph::refine(void) {
 		Cell* target = uncounted_cells.front(); uncounted_cells.pop();
 
 		for (int i = target->begin; i < target->end; ++i) {
-			Node* u = pi.nodes[i];
-			for (Node* v: pi.nodes) {
-				if (adj_list[v].find(u) != adj_list[v].end()) {
-					++(v->tmp);
-				}
+			int u = pi.nodes[i];
+			for (int v: adj_list[u]) {
+				++degree[v];
 			}
 		}
 
@@ -146,15 +144,15 @@ void Graph::refine(void) {
 
 		list<Cell>::iterator cell;
 		for (cell = pi.cells.begin(); cell != pi.cells.end(); ++cell) {
-			vector<Node*>::iterator begin = pi.nodes.begin() + cell->begin;
-			vector<Node*>::iterator end = pi.nodes.begin() + cell->end;
-			const function<bool(const Node*, const Node*)> cmp = [](const Node* a, const Node* b) -> bool {
-				return a->tmp < b->tmp;
+			vector<int>::iterator begin = pi.nodes.begin() + cell->begin;
+			vector<int>::iterator end = pi.nodes.begin() + cell->end;
+			const function<bool(const int&, const int&)> cmp = [&degree](const int& a, const int& b) -> bool {
+				return degree[a] < degree[b];
 			};
 
 			sort(begin, end, cmp);
 
-			if (pi.nodes[cell->begin]->tmp != pi.nodes[cell->end-1]->tmp) {
+			if (degree[pi.nodes[cell->begin]] != degree[pi.nodes[cell->end-1]]) {
 				int idx = cell->begin;
 				while (idx < cell->end) {
 					Cell* new_cell = new Cell();
