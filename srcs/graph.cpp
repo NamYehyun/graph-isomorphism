@@ -120,6 +120,30 @@ void Partition::refine(void) {
 	return;
 }
 
+void Partition::isolate(int target) {
+	list<Cell>::iterator cell;
+	for (cell = cells.begin(); cell != cells.end(); ++cell) {
+		if (cell->end - cell->begin == 1) {
+			continue;
+		}
+
+		for (int i = cell->begin; i < cell->end; ++i) {
+			if (nodes[i] == target) {
+				int tmp = nodes[cell->begin];
+				nodes[cell->begin] = nodes[i];
+				nodes[i] = tmp;
+
+				Cell new_cell(cell->begin, cell->begin+1);
+				cells.insert(cell, new_cell);
+
+				++(cell->begin);
+
+				return;
+			}
+		}
+	}
+}
+
 void Partition::print(void) const {
 	cout << "| ";
 	for (const Cell cell: cells) {
@@ -189,7 +213,7 @@ void Graph::print(void) const {
 	cout << "Graph `" << name << "`" << endl;
 	cout << "  # Nodes: " << num_nodes << endl;
 	cout << "  # Edges: " << num_edges << endl;
-	cout << "  pi: "; pi->print(); cout << endl;
+	// cout << "  pi: "; pi->print(); cout << endl;
 
 	return;
 }

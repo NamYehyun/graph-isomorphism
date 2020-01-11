@@ -36,6 +36,7 @@ public:
 	Partition(int _num_nodes, vector<vector<int>>& _adj_list);
 
 	void refine(void);
+	void isolate(int target);
 
 	void print(void) const;
 };
