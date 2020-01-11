@@ -28,13 +28,14 @@ public:
 
 class Partition {
 public:
-	bool init;
 	bool equitable;
-
 	vector<int> nodes;
+	vector<vector<int>>& adj_list;
 	list<Cell> cells;
 
-	Partition(void);
+	Partition(int _num_nodes, vector<vector<int>>& _adj_list);
+
+	void refine(void);
 
 	void print(void) const;
 };
@@ -47,7 +48,7 @@ public:
 	vector<Node*> id_to_node;
 	vector<vector<int>> adj_list;
 
-	Partition pi;
+	Partition* pi;
 
 	Graph(void);
 	~Graph(void);
@@ -56,8 +57,6 @@ public:
 	void set_name(string _name);
 	void add_node(int id);
 	void add_edge(int u, int v);
-
-	void refine(void);
 
 	void print(void) const;
 };

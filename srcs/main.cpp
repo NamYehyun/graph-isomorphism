@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
 		cout << setfill('.') << left << setw(70) << "  Refine graph" << endl << setfill(' ');
 	}
 
-	graph.refine();
+	graph.pi->refine();
 
 	if (verbose) {
 		cout << "  " << setfill('.') << right << setw(68) << to_string(1e-3 * timer.click()) + " ms elapsed" << endl << setfill(' ');
