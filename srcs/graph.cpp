@@ -121,7 +121,6 @@ void Graph::refine(void) {
 
 		target->counted = true;
 
-		stable = true;
 		list<Cell>::iterator cell;
 		for (cell = pi.cells.begin(); cell != pi.cells.end(); ++cell) {
 			vector<Node*>& cnodes = cell->nodes;
@@ -131,15 +130,15 @@ void Graph::refine(void) {
 
 				int idx = 0;
 				while (idx < static_cast<int>(cnodes.size())) {
-					Cell new_cell;
-					new_cell.nodes.emplace_back(cnodes[idx]);
+					Cell* new_cell = new Cell();;
+					new_cell->nodes.emplace_back(cnodes[idx]);
 					while (idx < static_cast<int>(cnodes.size()) - 1 && cnodes[idx+1]->tmp == cnodes[idx]->tmp) {
-						new_cell.nodes.emplace_back(cnodes[idx+1]);
+						new_cell->nodes.emplace_back(cnodes[idx+1]);
 						++idx;
 					}
 
-					pi.cells.insert(cell, new_cell);
-					uncounted_cells.push(&new_cell);
+					pi.cells.insert(cell, *new_cell);
+					uncounted_cells.push(new_cell);
 					++idx;
 				}
 
@@ -151,7 +150,7 @@ void Graph::refine(void) {
 				stable = false;
 			}
 		}
-	} while (!stable);
+	} while (!uncounted_cells.empty());
 
 	pi.equitable = true;
 
@@ -162,7 +161,7 @@ void Graph::print(void) {
 	cout << "Graph `" << name << "`" << endl;
 	cout << "  # Nodes: " << num_nodes << endl;
 	cout << "  # Edges: " << num_edges << endl;
-	// cout << "  pi: "; pi.print(); cout << endl;
+	cout << "  pi: "; pi.print(); cout << endl;
 
 	return;
 }
