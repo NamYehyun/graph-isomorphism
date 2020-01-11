@@ -121,6 +121,8 @@ void Partition::refine(void) {
 }
 
 void Partition::isolate(int target) {
+	equitable = false;
+
 	list<Cell>::iterator cell;
 	for (cell = cells.begin(); cell != cells.end(); ++cell) {
 		if (cell->end - cell->begin == 1) {
