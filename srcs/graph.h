@@ -35,6 +35,8 @@ public:
 
 	Partition(int _num_nodes, vector<vector<int>>& _adj_list);
 
+	bool operator==(const Partition& other) const;
+
 	void refine(void);
 	void isolate(int target);
 

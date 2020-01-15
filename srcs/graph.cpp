@@ -146,6 +146,27 @@ void Partition::isolate(int target) {
 	}
 }
 
+bool Partition::operator==(const Partition& other) const {
+	list<Cell>::const_iterator cell_x = cells.begin();
+	list<Cell>::const_iterator cell_y = other.cells.begin();
+	do {
+		if (cell_x->begin != cell_y->begin || cell_x->end != cell_y->end) {
+			return false;
+		}
+
+		for (int i = cell_x->begin; i < cell_x->end; ++i) {
+			if (nodes[i] != other.nodes[i]) {
+				return false;
+			}
+		}
+
+		++cell_x;
+		++cell_y;
+	} while (cell_x != cells.end() && cell_y != other.cells.end());
+
+	return true;
+}
+
 void Partition::print(void) const {
 	cout << "| ";
 	for (const Cell cell: cells) {
@@ -215,7 +236,7 @@ void Graph::print(void) const {
 	cout << "Graph `" << name << "`" << endl;
 	cout << "  # Nodes: " << num_nodes << endl;
 	cout << "  # Edges: " << num_edges << endl;
-	// cout << "  pi: "; pi->print(); cout << endl;
+	cout << "  pi: "; pi->print(); cout << endl;
 
 	return;
 }
