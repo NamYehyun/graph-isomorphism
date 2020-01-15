@@ -154,10 +154,11 @@ bool Partition::operator==(const Partition& other) const {
 			return false;
 		}
 
-		for (int i = cell_x->begin; i < cell_x->end; ++i) {
-			if (nodes[i] != other.nodes[i]) {
-				return false;
-			}
+		int begin = cell_x->begin;
+		int end = cell_x->end;
+
+		if (!is_permutation(nodes.begin()+begin, nodes.begin()+end, other.nodes.begin()+begin)) {
+			return false;
 		}
 
 		++cell_x;
