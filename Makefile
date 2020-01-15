@@ -1,6 +1,6 @@
 CXX := g++
-#CXXFLAGS := -std=c++14
-CXXFLAGS := -std=c++14 -DBENCHMARK
+CXXFLAGS := -std=c++14
+#CXXFLAGS := -std=c++14 -DBENCHMARK
 TARGET := graph-isomorphism
 OBJECTS := objs/main.o objs/graph.o objs/utils.o
 

@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 	verbose = true;
 	#endif
 
-	Timer timer;
+	/* Timer timer;
 	timer.click();
 
 	Graph graph;
@@ -80,7 +80,36 @@ int main(int argc, char* argv[]) {
 
 	cout << endl;
 	graph.print();
-	cout << endl;
+	cout << endl; */
+
+	Graph g, h;
+	if (!read_graph(input_path, g) || !read_graph(input_path, h)) {
+		return EXIT_FAILURE;
+	}
+
+	g.set_name("G");
+	h.set_name("H");
+
+	h.pi->refine();
+	h.pi->isolate(0);
+	h.pi->refine();
+	cout << "\033[1;31m" << (swap(h) ? "" : "not swapped\n") << "\033[0m" << endl;
+
+	g.pi->refine();
+	g.pi->isolate(0);
+	g.pi->refine();
+
+	h.pi->refine();
+	for (int i = 0; i < h.num_nodes; ++i) {
+		h.pi->isolate(i);
+		h.pi->refine();
+
+		if (*g.pi == *h.pi) {
+			cout << "G and H might be isomorphic (G:" << 0 << " -> H:" << i << ")" << endl;
+		}
+
+		h.pi = new Partition(h.num_nodes, h.adj_list);
+	}
 
 	return EXIT_SUCCESS;
 }
