@@ -74,7 +74,7 @@ void Partition::refine(void) {
 		#endif
 
 		list<Cell>::iterator cell;
-		for (cell = cells.begin(); cell != cells.end(); ++cell) {
+		for (cell = cells.begin(); cell != cells.end();) {
 			vector<int>::iterator begin = nodes.begin() + cell->begin;
 			vector<int>::iterator end = nodes.begin() + cell->end;
 			const function<bool(const int&, const int&)> cmp = [&degree](const int& a, const int& b) -> bool {
@@ -100,6 +100,8 @@ void Partition::refine(void) {
 				if (cell == cells.end()) {
 					break;
 				}
+			} else {
+				++cell;
 			}
 		}
 
@@ -154,12 +156,12 @@ bool Partition::operator==(const Partition& other) const {
 			return false;
 		}
 
-		int begin = cell_x->begin;
+		/*int begin = cell_x->begin;
 		int end = cell_x->end;
 
 		if (!is_permutation(nodes.begin()+begin, nodes.begin()+end, other.nodes.begin()+begin)) {
 			return false;
-		}
+		}*/
 
 		++cell_x;
 		++cell_y;
@@ -174,7 +176,8 @@ void Partition::print(void) const {
 		for (int i = cell.begin; i < cell.end; ++i) {
 			cout << nodes[i] << ' ';
 		}
-		cout << "| ";
+		//cout << "| ";
+		cout << endl;
 	}
 
 	return;
