@@ -99,8 +99,8 @@ int main(int argc, char* argv[]) {
 	g.pi->isolate(0);
 	g.pi->refine();
 
-	h.pi->refine();
 	for (int i = 0; i < h.num_nodes; ++i) {
+		h.pi->refine();
 		h.pi->isolate(i);
 		h.pi->refine();
 
