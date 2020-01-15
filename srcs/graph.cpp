@@ -176,8 +176,7 @@ void Partition::print(void) const {
 		for (int i = cell.begin; i < cell.end; ++i) {
 			cout << nodes[i] << ' ';
 		}
-		//cout << "| ";
-		cout << endl;
+		cout << "| ";
 	}
 
 	return;

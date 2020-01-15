@@ -99,17 +99,27 @@ int main(int argc, char* argv[]) {
 	g.pi->isolate(0);
 	g.pi->refine();
 
+	g.print();
+	cout << endl;
+
+	vector<int> candidates;
 	for (int i = 0; i < h.num_nodes; ++i) {
 		h.pi->refine();
 		h.pi->isolate(i);
 		h.pi->refine();
 
 		if (*g.pi == *h.pi) {
-			cout << "G and H might be isomorphic (G:" << 0 << " -> H:" << i << ")" << endl;
+			candidates.emplace_back(i);
 		}
 
 		h.pi = new Partition(h.num_nodes, h.adj_list);
 	}
+
+	cout << "candidates: ";
+	for (int c: candidates) {
+		cout << c << ' ';
+	}
+	cout << endl;
 
 	return EXIT_SUCCESS;
 }
